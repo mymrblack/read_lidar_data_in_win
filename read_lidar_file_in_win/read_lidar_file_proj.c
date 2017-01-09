@@ -64,15 +64,15 @@ int main(int argc, char *argv[]){
 
     FILE * outfile, *infile;
     
-    outfile = fopen(argv[2], "wb" );
+  //  outfile = fopen(argv[2], "wb" );
 	infile = fopen(argv[1], "rb");
     
    // unsigned char buf[MAXLEN];
     
-    if( outfile == NULL || infile == NULL ){
+ /*   if( outfile == NULL || infile == NULL ){
         printf("%s, %s",argv[1],"not exit/n");
         exit(1);
-    }   
+    }   */
     
     int rc;
     
@@ -81,17 +81,18 @@ int main(int argc, char *argv[]){
     }*/
     fread(lidarData, sizeof(int), DATA_WORDS*FIFO_SIZE, infile);
 
-    FIFO_printData(lidarData, FIFO_SIZE, 300);
-
-    for(i = 0; i< FIFO_SIZE, i++){
+    //FIFO_printData(lidarData, FIFO_SIZE, 300);
+	int i;
+	for (i = 0; i < FIFO_SIZE; i++){
        gpsData[i].timeData1 = lidarData[i].gps1;
        gpsData[i].timeData2 = lidarData[i].gps2;
        GPS_timeDataDecode(&gpsData[i]);
     }
+    Lidar_printData(lidarData, gpsData, FIFO_SIZE, 300);
 
     fclose(infile);
 
-    fclose(outfile);
+ //   fclose(outfile);
 
     system("PAUSE");
 
@@ -133,20 +134,22 @@ void Lidar_printData(Lidar_Data *data, Time_Data *gps, int range, int step){
     int i;
     #ifdef IMODE
     for(i = 0; i < range; i+= step){
-        printf("triTimes:%d\t Time:%4d/%2d/%2d %2d:%2d:%2d\tch1:%d\tch2:%d\tch3:%d\tch4:%d\tch5:%d\tch6:%d\tch7:%d\tch8:%d\r\n",
+        printf("triTimes:%4d\t Time:%4d/%2d/%2d-%2d:%2d:%2d-%3d:%3d\tch1:%8d\tch2:%8d\tch3:%8d\tch4:%8d\tch5:%8d\tch6:%8d\tch7:%8d\tch8:%8d\r\n",
         		(&data[i])->triTimes, 
                 (&gps[i])->year, (&gps[i])->month, (&gps[i])->day,
                 (&gps[i])->hour, (&gps[i])->minute, (&gps[i])->second,
+                (&gps[i])->millisec, (&gps[i])->microsec,
 				(&data[i])->ch1, (&data[i])->ch2, (&data[i])->ch3,
 				(&data[i])->ch4, (&data[i])->ch5, (&data[i])->ch6,
 				(&data[i])->ch7, (&data[i])->ch8);
     }
     #else
     for(i = 0; i < range; i+= step){
-        printf("triTimes:%d\t Time:%4d/%2d/%2d %2d:%2d:%2d\tch1:%d\tch2:%d\tch3:%d\tch4:%d\tch5:%d\tch6:%d\tch7:%d\tch8:%d\r\n",
+        printf("triTimes:%4d\t Time:%4d/%2d/%2d-%2d:%2d:%2d-%3d:%3d\tch1:%8d\tch2:%8d\r\n),
         		(&data[i])->triTimes, 
                 (&gps[i])->year, (&gps[i])->month, (&gps[i])->day,
                 (&gps[i])->hour, (&gps[i])->minute, (&gps[i])->second,
+                (&gps[i])->millisec, (&gps[i])->microsec,
         		(&data[i])->ch1, (&data[i])->ch2);
     }
     #endif
