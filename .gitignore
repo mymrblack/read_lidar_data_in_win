@@ -33,3 +33,7 @@
 *.su
 *.opensdf
 *.log
+*.pdb
+*.idb
+*.xls
+/Debug/
