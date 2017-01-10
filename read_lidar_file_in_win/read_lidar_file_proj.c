@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include"io.h"
 
 /************** Choose Mode *************/
 #define IMODE 1
@@ -61,44 +62,90 @@ unsigned char buf[DATA_LEN * READ_SIZE];
 void FIFO_printData(Lidar_Data *data, int range, int step);
 void Lidar_printData(Lidar_Data *data, Time_Data *gps, int range, int step);
 void Lidar_printDataToString(Lidar_Data *data, Time_Data *gps, char *buf);
+void Lidar_getOutFilePath(char *full_path, char *dir_path, char *file_name);
+void Lidar_getInFilePath(char *full_path, char *dir_path, char *file_name);
 void GPS_timeDataDecode(Time_Data *timeData);
-    
-int main(int argc, char *argv[]){
-    if( argc < 3 )
+int Lidar_TransferDataFile(char *in_file_path, char *out_file_path);
+
+#define ORIGINAL_FILE_NAME  "/data*.xls"
+int main(int argc, char *argv[])
+{
+    struct _finddata_t files;
+    int File_Handle;
+    int i=0;
+    char file_check_path[MAXLEN] = "0";
+    char *dir_path;
+    char out_file_path[MAXLEN] = "0";
+    char in_file_path[MAXLEN] = "0";
+    FILE *outfile, *infile;
+
+    if( argc < 2 )
     {
-        printf("usage: %s %s/n", argv[0], "infile outfile");
+        printf("usage: %s %s/n", argv[0], "dir_path");
         exit(1);
     }
+    dir_path = argv[1];
 
-    FILE * outfile, *infile;
+    strcpy(file_check_path, dir_path);
+    strcat(file_check_path, ORIGINAL_FILE_NAME);
+
+    File_Handle = _findfirst(file_check_path,&files);
+    if(File_Handle==-1)
+    {
+        printf("error\n");
+        return 0;
+    }
+    do
+    {
+        printf("%s \n",files.name);
+        Lidar_getInFilePath(in_file_path, dir_path, files.name);
+        printf("%s \n", in_file_path);
+        Lidar_getOutFilePath(out_file_path, dir_path, files.name);
+        printf("%s \n", out_file_path);
+        Lidar_TransferDataFile(in_file_path, out_file_path);
+        i++;
+    }while(0==_findnext(File_Handle,&files));
+    _findclose(File_Handle);
+    printf("Transfered %d files\n",i);
+    system("PAUSE");
+    return 0;
+}
+
+int Lidar_TransferDataFile(char *in_file_path, char *out_file_path){
+    FILE *outfile, *infile;
     
-    outfile = fopen(argv[2], "wb" );
-	infile = fopen(argv[1], "rb");
-    
-    if( outfile == NULL || infile == NULL ){
-        printf("%s, %s",argv[1],"not exit/n");
-        exit(1);
-    }   
+    outfile = fopen(out_file_path, "wb" );
+	infile = fopen(in_file_path, "rb");
     
     fread(lidarData, sizeof(int), DATA_WORDS * FIFO_SIZE * FIFO_NUM_EACH_PAGE, infile);
 
 	int i;
-	for (i = 0; i < FIFO_SIZE * FIFO_NUM_EACH_PAGE; i++){
+	for (i = 0; i < READ_SIZE; i++){
        gpsData[i].timeData1 = lidarData[i].gps1;
        gpsData[i].timeData2 = lidarData[i].gps2;
        GPS_timeDataDecode(&gpsData[i]);
     }
- //   Lidar_printData(lidarData, gpsData FIFO_SIZE, 300);
 
     Lidar_printDataToString(lidarData, gpsData, buf);
-    fwrite( buf, sizeof( unsigned char ), sizeof(buf), outfile );
+    fwrite(buf, sizeof( unsigned char ), sizeof(buf), outfile);
 
     fclose(infile);
     fclose(outfile);
 
-    system("PAUSE");
-
     return 0;
+}
+
+#define OUT_FILE_MARK  "/Transfered_"
+void Lidar_getOutFilePath(char *full_path, char *dir_path, char *file_name){
+    strcpy(full_path, dir_path);
+    strcat(full_path, OUT_FILE_MARK);
+    strcat(full_path, file_name); 
+}
+
+void Lidar_getInFilePath(char *full_path, char *dir_path, char *file_name){
+    strcpy(full_path, dir_path);
+    strcat(full_path, "/"); 
+    strcat(full_path, file_name); 
 }
 
 void FIFO_printData(Lidar_Data *data, int range, int step){
@@ -192,3 +239,5 @@ void Lidar_printDataToString(Lidar_Data *data, Time_Data *gps, char *buf){
     }
     #endif
 }
+
+
