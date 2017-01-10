@@ -7,12 +7,12 @@
 
 #define MAXLEN 1024
 #define FIFO_SIZE           8192
-#define FIFO_NUM_EACH_PAGE  100
+#define FIFO_NUM_EACH_PAGE  10
 #define READ_SIZE   FIFO_SIZE * FIFO_NUM_EACH_PAGE
 
 #ifdef IMODE
 #define DATA_WORDS	11
-#define DATA_LEN    100
+#define DATA_LEN    85
 #else
 #define DATA_WORDS	5
 #define DATA_LEN    50 //need to be test.
@@ -167,7 +167,7 @@ void Lidar_printDataToString(Lidar_Data *data, Time_Data *gps, char *buf){
     int i;
     int line_len = 0;
 	int title_len = 0;
-	line_len = strlen(DATA_FORMAT) + 16;
+	line_len = strlen(DATA_FORMAT) + 12;//12 is a test result, if it less than 12, data would be writen in one line.
 	title_len = strlen(TITLE_FORMAT);
 
     sprintf(buf, TITLE_FORMAT);
@@ -183,7 +183,7 @@ void Lidar_printDataToString(Lidar_Data *data, Time_Data *gps, char *buf){
     }
     #else
     for(i = 0; i < READ_SIZE; i++){
-        sprintf(buf + i*(line_len + 4), DATA_FORMAT,
+		sprintf(buf + title_len + i*(line_len), DATA_FORMAT,
         		(&data[i])->triTimes, 
                 (&gps[i])->year, (&gps[i])->month, (&gps[i])->day,
                 (&gps[i])->hour, (&gps[i])->minute, (&gps[i])->second,
