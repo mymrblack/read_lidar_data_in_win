@@ -78,7 +78,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="read_lidar_file.c" />
     <ClCompile Include="read_lidar_file_proj.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="read_lidar_file.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

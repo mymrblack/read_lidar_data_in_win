@@ -18,5 +18,13 @@
     <ClCompile Include="read_lidar_file_proj.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="read_lidar_file.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="read_lidar_file.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
