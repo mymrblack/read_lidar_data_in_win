@@ -61,7 +61,7 @@ unsigned char buf[DATA_LEN * READ_SIZE];
 
 void FIFO_printData(Lidar_Data *data, int range, int step);
 void Lidar_printData(Lidar_Data *data, Time_Data *gps, int range, int step);
-void Lidar_printDataToString(Lidar_Data *data, Time_Data *gps, char *buf);
+unsigned int Lidar_printDataToString(Lidar_Data *data, Time_Data *gps, char *buf, unsigned int line_num);
 void Lidar_getOutFilePath(char *full_path, char *dir_path, char *file_name);
 void Lidar_getInFilePath(char *full_path, char *dir_path, char *file_name);
 void GPS_timeDataDecode(Time_Data *timeData);
@@ -113,21 +113,27 @@ int main(int argc, char *argv[])
 
 int Lidar_TransferDataFile(char *in_file_path, char *out_file_path){
     FILE *outfile, *infile;
+    unsigned int read_words = 0;
+    unsigned int line_num = 0;
+    unsigned int write_num = 0;
     
     outfile = fopen(out_file_path, "wb" );
 	infile = fopen(in_file_path, "rb");
     
-    fread(lidarData, sizeof(int), DATA_WORDS * FIFO_SIZE * FIFO_NUM_EACH_PAGE, infile);
+    read_words = fread(lidarData, sizeof(int), DATA_WORDS * FIFO_SIZE * FIFO_NUM_EACH_PAGE, infile);
+    line_num = read_words / DATA_WORDS;
 
 	int i;
-	for (i = 0; i < READ_SIZE; i++){
+	for (i = 0; i < line_num; i++){
        gpsData[i].timeData1 = lidarData[i].gps1;
        gpsData[i].timeData2 = lidarData[i].gps2;
        GPS_timeDataDecode(&gpsData[i]);
     }
 
-    Lidar_printDataToString(lidarData, gpsData, buf);
-    fwrite(buf, sizeof( unsigned char ), sizeof(buf), outfile);
+    write_num = Lidar_printDataToString(lidarData, gpsData, buf, line_num);
+    printf("%d \n", strlen(buf));
+    read_words = fwrite(buf, sizeof(unsigned char), write_num, outfile);
+    printf("%d \n", read_words);
 
     fclose(infile);
     fclose(outfile);
@@ -210,16 +216,18 @@ void Lidar_printData(Lidar_Data *data, Time_Data *gps, int range, int step){
 #define TITLE_FORMAT "time\tch1\tch2\n"
 #endif
 
-void Lidar_printDataToString(Lidar_Data *data, Time_Data *gps, char *buf){
-    int i;
+unsigned int Lidar_printDataToString(Lidar_Data *data, Time_Data *gps, char *buf, unsigned int line_num){
     int line_len = 0;
 	int title_len = 0;
+    int totle_print_num = 0;
 	line_len = strlen(DATA_FORMAT) + 12;//12 is a test result, if it less than 12, data would be writen in one line.
 	title_len = strlen(TITLE_FORMAT);
 
     sprintf(buf, TITLE_FORMAT);
+
+    int i;
     #ifdef IMODE
-    for(i = 1; i < READ_SIZE; i++){
+    for(i = 1; i < line_num; i++){
         sprintf(buf + title_len + i*(line_len), DATA_FORMAT,
                 (&gps[i])->year, (&gps[i])->month, (&gps[i])->day,
                 (&gps[i])->hour, (&gps[i])->minute, (&gps[i])->second,
@@ -229,7 +237,7 @@ void Lidar_printDataToString(Lidar_Data *data, Time_Data *gps, char *buf){
 				(&data[i])->ch7, (&data[i])->ch8);
     }
     #else
-    for(i = 0; i < READ_SIZE; i++){
+    for(i = 0; i < line_num; i++){
 		sprintf(buf + title_len + i*(line_len), DATA_FORMAT,
         		(&data[i])->triTimes, 
                 (&gps[i])->year, (&gps[i])->month, (&gps[i])->day,
@@ -238,6 +246,7 @@ void Lidar_printDataToString(Lidar_Data *data, Time_Data *gps, char *buf){
         		(&data[i])->ch1, (&data[i])->ch2);
     }
     #endif
+    return totle_print_num = title_len + line_len * line_num;
 }
 
 
