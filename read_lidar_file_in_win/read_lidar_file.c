@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include"io.h"
+#include "io.h"
 #include "read_lidar_file.h"
 
 Lidar_Data lidarData[READ_SIZE] = {{0}};

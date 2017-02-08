@@ -1,8 +1,15 @@
-﻿生成启动时间为 2017/1/11 14:44:00。
+﻿生成启动时间为 2017/1/17 15:28:11。
      1>项目“E:\Lin\VisualStudio_learning\read_lidar_data_in_win\read_lidar_file_in_win\read_lidar_file_in_win.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt read_lidar_file_proj.c
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt read_lidar_file.c read_lidar_file_proj.c
          read_lidar_file_proj.c
+         read_lidar_file.c
+     1>e:\lin\visualstudio_learning\read_lidar_data_in_win\read_lidar_file_in_win\read_lidar_file.c(34): warning C4018: “<”: 有符号/无符号不匹配
+     1>e:\lin\visualstudio_learning\read_lidar_data_in_win\read_lidar_file_in_win\read_lidar_file.c(42): warning C4013: “strcpy”未定义；假设外部返回 int
+     1>e:\lin\visualstudio_learning\read_lidar_data_in_win\read_lidar_file_in_win\read_lidar_file.c(43): warning C4013: “strcat”未定义；假设外部返回 int
+     1>e:\lin\visualstudio_learning\read_lidar_data_in_win\read_lidar_file_in_win\read_lidar_file.c(112): warning C4013: “strlen”未定义；假设外部返回 int
+     1>e:\lin\visualstudio_learning\read_lidar_data_in_win\read_lidar_file_in_win\read_lidar_file.c(118): warning C4018: “<”: 有符号/无符号不匹配
+         正在生成代码...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\Lin\VisualStudio_learning\read_lidar_data_in_win\read_lidar_file_in_win\Debug\read_lidar_file_in_win.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\Lin\VisualStudio_learning\read_lidar_data_in_win\read_lidar_file_in_win\Debug\read_lidar_file_in_win.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\Lin\VisualStudio_learning\read_lidar_data_in_win\read_lidar_file_in_win\Debug\read_lidar_file_in_win.lib" /MACHINE:X86 Debug\read_lidar_file.obj
          Debug\read_lidar_file_proj.obj
@@ -11,4 +18,4 @@
 
 生成成功。
 
-已用时间 00:00:00.45
+已用时间 00:00:00.32

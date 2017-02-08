@@ -4,7 +4,7 @@
 
 #define MAXLEN 1024
 #define FIFO_SIZE           8192
-#define FIFO_NUM_EACH_PAGE  10
+#define FIFO_NUM_EACH_PAGE  100
 #define READ_SIZE   FIFO_SIZE * FIFO_NUM_EACH_PAGE
 #define OUT_FILE_MARK  "/Transfered_"
 #define ORIGINAL_FILE_NAME  "/data*.xls"
