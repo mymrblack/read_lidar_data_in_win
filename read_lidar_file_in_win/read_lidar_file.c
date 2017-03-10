@@ -127,18 +127,19 @@ unsigned int Lidar_printDataToString(Lidar_Data *data, Time_Data *gps, char *buf
     #else
     for(i = 0; i < line_num; i++){
 		sprintf(buf + title_len + i*(line_len), DATA_FORMAT,
-        		(&data[i])->triTimes, 
                 (&gps[i])->year, (&gps[i])->month, (&gps[i])->day,
                 (&gps[i])->hour, (&gps[i])->minute, (&gps[i])->second,
                 (&gps[i])->millisec, (&gps[i])->microsec,
-        		(&data[i])->ch1, (&data[i])->ch2);
+        		(&data[i])->ch1, (&data[i])->ch2,
+                (&data[i])->delay1, (&data[i])->delay2, 
+                (&data[i])->delay3, (&data[i])->delay4);
     }
     #endif
     return totle_print_num = title_len + line_len * line_num;
 }
 
 
-int Lidar_TransgerAllDataFilesInDir(char *dir_path){
+int Lidar_TransferAllDataFilesInDir(char *dir_path){
     struct _finddata_t files;
     int File_Handle;
 	int file_num = 0;

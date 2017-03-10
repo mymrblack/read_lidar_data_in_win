@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    Lidar_TransgerAllDataFilesInDir(argv[1]);
+    Lidar_TransferAllDataFilesInDir(argv[1]);
 
     system("PAUSE");
     return 0;

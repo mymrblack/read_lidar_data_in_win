@@ -1,5 +1,5 @@
 /************** Choose Mode *************/
-#define IMODE 1
+//#define IMODE 1
 /****************************************/
 
 #define MAXLEN 1024
@@ -15,10 +15,10 @@
 #define DATA_FORMAT "%04d/%02d/%02d-%02d:%02d:%02d-%03d:%03d\t%6d\t%6d\t%6d\t%6d\t%6d\t%6d\t%6d\t%6d\n"
 #define TITLE_FORMAT "time\tch1\tch2\tch3\tch4\tch5\tch6\tch7\tch8\n"
 #else
-#define DATA_WORDS	5
-#define DATA_LEN    50 //need to be test.
-#define DATA_FORMAT "%04d/%02d/%02d-%02d:%02d:%02d-%03d:%03d\tch1\t%8d\tch2\t%8d\n" 
-#define TITLE_FORMAT "time\tch1\tch2\n"
+#define DATA_WORDS	9
+#define DATA_LEN    73//need to be test.
+#define DATA_FORMAT "%04d/%02d/%02d-%02d:%02d:%02d-%03d:%03d\t%7d\t%7d\t%6d\t%6d\t%6d\t%6d\n" 
+#define TITLE_FORMAT "time\tch1\tch2\tdelay1(ns)\tdelay2(ns)\tdelay3(ns)\tdelay4(ns)\n"
 #endif
 
 #ifdef IMODE
@@ -42,6 +42,10 @@ typedef	struct{
 	unsigned int gps1;
 	unsigned int gps2;
 	unsigned int triTimes;
+    int delay1;
+    int delay2;
+    int delay3;
+    int delay4;
 } Lidar_Data;
 #endif
 typedef	struct{
